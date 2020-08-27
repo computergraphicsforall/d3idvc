@@ -20,14 +20,18 @@
         
         // countries.geo.json
         loadingFile = dataLoad('../data/upz.json');
-        loadingFile
+        loadingFile.then(data => geoData = data)
+            .then(data => dataLoad('../data/choropleth_data.json'))
+            .then(data => dataMappingGeoJson(data, [], 'COD_UPZ'))
+            .then(data => geoValues = data)
+            .then(c => upzChoroplethMap())
             
             
          
-        function upzChoroplethMap (dataPolygons, dataChoropleth) {
+        function upzChoroplethMap () {
 
-            
-
+            let svgContainer = createSVGViewbox('#main-container', 'map', 'xMinYMin meet', -50, 80, 1000, 500);
+            addChoroplethLayerOnMap('#map', geoData, geoValues, 1, 9, 'COD_UPZ', 'ALEATORIO', [-74.081749, 4.6097102], 80000, 'svg', 'upz', true);
         }
     </script>
 </body>

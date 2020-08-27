@@ -1,1 +1,7 @@
+.svg {
 
+    fill: none;
+    stroke: black;
+    transform-origin: center center;
+    transform: rotate(-80deg);
+}

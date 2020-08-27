@@ -70,3 +70,40 @@ function createWorlMapMercatorProj(svgElement, data, styleClass) {
     
 }
 
+function addChoroplethLayerOnMap (svgElement, geoData, choroData, color, kColors, idMasterKey, property, centralPoint, scale, svgClass, pathClass, hoverEfect) {
+
+    let colorPalette;
+
+    switch(color) {
+
+        case 1: 
+            colorPalette = d3.schemeBlues[kColors];
+        break;
+
+        case 2:
+            colorPalette = d3.schemeGreens[kColors];
+        break;
+    }
+
+    let dataDomain = d3.extent(geoData, d => extractDomainValues(d, property))
+    let colorScale = d3.scaleQuantize().domain(dataDomain).range(colorPalette);
+    
+    let projection = d3.geoMercator().center(centralPoint).scale(scale);
+
+    let path = d3.geoPath().projection(projection);
+    console.log(geoData);
+    let svg = d3.select(svgElement);
+    svg.append('g')
+        .attr('class', svgClass)
+        .selectAll('path')
+        .data(geoData.features).enter()
+        .append('path')
+        .attr('d', path)
+
+
+}
+
+function extractDomainValues (element, property) {
+
+    return element.properties[property];
+}

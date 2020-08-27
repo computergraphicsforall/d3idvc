@@ -16,4 +16,58 @@ function dataLoad (path) {
     }  
 }
 
+function dataMappingGeoJson (data, properties, idMasterKey) {
+
+    let dataMapping;
+
+    try { 
+
+        if (data.features.length > 0) {
+        
+            dataMapping = data.features.map(feature  => {
+
+                let doc = {};
+                doc[idMasterKey] = feature.properties[idMasterKey];
+                
+                let prop = {};
+                if (properties.length == 0) {
+
+                    let keysProperties = Object.keys(feature.properties);
+                    keysProperties.splice(keysProperties.indexOf(idMasterKey), 1);
+
+                    for (let p of keysProperties){
+                        prop[p] = feature.properties[p];
+                    }
+                        
+                } else {
+
+                    let keysProperties = properties.splice(properties.indexOf(idMasterKey), 1);
+                    for (let p of keysProperties){
+                        prop[p] = feature.properties[p];
+                    }
+                }
+                
+                doc['properties'] = prop;
+                return doc;
+            });
+            //console.log(dataMapping);       
+            return dataMapping;
+
+        } else {
+
+            console.log('No data to mapping');
+            
+        }
+        
+    } catch (error) {
+
+        console.log('Module: dataManipulation.js -> Function: dataMappingGeoJson. Error: ' + error);
+        
+    }
+    
+    
+    
+    
+
+}
 
