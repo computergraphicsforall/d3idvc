@@ -12,16 +12,38 @@
         <!-- La ruta de estos recursos son relativos dependiendo en donde usted los tenga -->
         <script type="text/javascript" src="../../grafica/three.js/build/three.js"></script>
         <script type="text/javascript" src="../../grafica/three.js/examples/js/controls/OrbitControls.js"></script>
+        <script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
     </head>
     <body>
         <script type="text/javascript">
             //http://math.hws.edu/graphicsbook/index.html Libro de computación grafica, en linea y gratis
 
-            var renderer, scene, camera, light1, controls;
+            var renderer, scene, camera, light1, controls, polygonUPZ;
+            const PATH_UPZ_FILE = '../data/dataupz.json';
 
-            initScene();
-            animate();
-            gui();
+            let dataUPZ = dataLoad(PATH_UPZ_FILE);
+            dataUPZ.then(data => polygonUPZ = data)
+                .then(c => initScene())
+                .then(c => animate())
+                .then(c => gui());
+
+            //initScene();
+            //animate();
+            //gui();
+
+
+
+            function dataLoad (path) {
+
+                if (path.endsWith('.csv') || path.endsWith('.CSV')) {
+                    
+                    return d3.csv(path);
+
+                } else if (path.endsWith('.json') || path.endsWith('.JSON')) {
+                    
+                    return d3.json(path);
+                }  
+            }
 
             function initScene() {
                 scene = new THREE.Scene();
