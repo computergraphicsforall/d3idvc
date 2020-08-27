@@ -47,6 +47,8 @@
 
                 scene.add(axis);
                 scene.add(light1)
+                
+                window.addEventListener('resize', onWindowResize, false);
             }
 
             function render() {
@@ -61,6 +63,16 @@
 
             function gui() {
 
+            }
+
+            function onWindowResize () {
+
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setClearColor('slategray');
+                controls.update();
+                render();
             }
         </script>
     </body>
