@@ -12,16 +12,46 @@
         <!-- La ruta de estos recursos son relativos dependiendo en donde usted los tenga -->
         <script type="text/javascript" src="../../grafica/three.js/build/three.js"></script>
         <script type="text/javascript" src="../../grafica/three.js/examples/js/controls/OrbitControls.js"></script>
+        <script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
     </head>
     <body>
         <script type="text/javascript">
             //http://math.hws.edu/graphicsbook/index.html Libro de computación grafica, en linea y gratis
 
-            var renderer, scene, camera, light1, controls;
+            var renderer, scene, camera, light1, controls, polygonUPZ;
+            const PATH_UPZ_FILE = '../data/dataupz.json';
 
-            initScene();
-            animate();
-            gui();
+            let dataUPZ = dataLoad(PATH_UPZ_FILE);
+            dataUPZ.then(data => polygonUPZ = data)
+                .then(c => initScene())
+                .then(c => animate())
+                .then(c => gui());
+
+            //initScene();
+            //animate();
+            //gui();
+            funtion drawMap(){
+                let map = new THREE.Group();
+                for (let i=0; i< polygonUPZ.features.length; i++){
+                    let polygonGeo = new THREE:THREE.Geometry();
+
+                    for (let j=0; j<; j++)
+                }
+            }
+
+
+
+            function dataLoad (path) {
+
+                if (path.endsWith('.csv') || path.endsWith('.CSV')) {
+
+                    return d3.csv(path);
+
+                } else if (path.endsWith('.json') || path.endsWith('.JSON')) {
+
+                    return d3.json(path);
+                }
+            }
 
             function initScene() {
                 scene = new THREE.Scene();
@@ -42,11 +72,15 @@
                 controls = new THREE.OrbitControls(camera, renderer.domElement)
                 controls.addEventListener('change', render)
 
+                drawMap();
+
 
                 const axis = new THREE.AxesHelper(2);
 
                 scene.add(axis);
                 scene.add(light1)
+
+                window.addEventListener('resize', onWindowResize, false);
             }
 
             function render() {
@@ -61,6 +95,16 @@
 
             function gui() {
 
+            }
+
+            function onWindowResize () {
+
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setClearColor('slategray');
+                controls.update();
+                render();
             }
         </script>
     </body>
