@@ -15,12 +15,20 @@
     <body>
         <script type="text/javascript">
 
-            let   renderer, scene, camera, light1, light2, controls, polygonUPZ;
+            let   renderer, scene, camera, light1, light2, controls, polygonUPZ, dataNuse, dataFilter;
             const PATH_UPZ_FILE = '../data/dataupz.json';
-
+            const PATH_NUSE_FILE = '../dataNuse/short.csv';
+            const timeConv = d3.timeParse("%Y-%m-%d");
+            
             let dataUPZ = dataLoad(PATH_UPZ_FILE);
             dataUPZ.then(data => polygonUPZ = data)
+                .then(c=> dataLoad(PATH_NUSE_FILE))
+                .then(c => dataNuse = c)
+
+                
                 .then(c => initScene())
+                .then(c => filter('2014-02-01', dataNuse))
+                .then(c => drawPoints(c))
                 .then(c => animate())
                 .then(c => gui());
 
@@ -97,6 +105,43 @@
 
                     return d3.json(path);
                 }
+            }
+
+            function drawPoints(data) {
+
+                let pGroup = new THREE.Group();
+                for (let i = 0; i < data.length; i++) {
+                    
+                    let point = new THREE.SphereBufferGeometry(0.001, 10, 10);
+                    let mtPoint = new THREE.MeshPhongMaterial({color: 'plum', shininess: 124});
+                    let mesh = new THREE.Mesh(point, mtPoint);
+                    mesh.position.set(+data[i].LONGITUD, +data[i].LATITUD, 0.01);
+                    pGroup.add(mesh);
+                }
+                scene.add(pGroup);
+
+            }
+
+            function filter (dateToFilter, data) {
+                
+                
+                let date = timeConv(dateToFilter);
+
+                let timeParse = d3.timeParse("%Y-%m-%d %H:%M:%S");
+                let month = date.getMonth();
+                let year = date.getFullYear();
+
+                filterArray = data.filter( function (e){
+
+                    let dateFilter = timeParse(e.FECHA);
+                    //console.log(e.FECHA)
+
+                    return (month == dateFilter.getMonth() && year == dateFilter.getFullYear()); 
+                });
+
+                console.log(filterArray);
+                return filterArray;
+
             }
 
             function initScene() {
