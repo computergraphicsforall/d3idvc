@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Computación gráfica -->
+        <!-- Jorge Victorino, Miguel Barrero-->
+        <title>Documento guia para Three.js</title>
+        <!--Configuracion meta-->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+        <!-- Recursos basicos de three.js -->
+        <!-- La ruta de estos recursos son relativos dependiendo en donde usted los tenga -->
+        <script type="text/javascript" src="../../grafica/three.js/build/three.js"></script>
+        <script type="text/javascript" src="../../grafica/three.js/examples/js/controls/OrbitControls.js"></script>
+        <script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+    </head>
+    <body>
+        <div id="contenedor" style="padding: 10px 10px;"> 
+            <button id="boton" value=false>▶</button>
+            <canvas id="myCanvas"  width="640" height="480" style="border:1px solid #d3d3d3; margin: 10px;"></canvas>
+            </div>
+
+        <script>
+
+            var vertex = [5, 15, 0, 15, 5, 0, 15, 10, 0, 5, 10, 0];
+            var mv = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
+            var canvas = document.getElementById('myCanvas');
+            var ctx = canvas.getContext('2d');
+            var value = false;
+            var boton = document.getElementById('boton');
+            boton.addEventListener('click', function (){
+                if (!value) {
+                    value = true;
+                    boton.value = true; 
+                    boton.innerText = '⏸';
+                    
+                } else {
+                    value = false;
+                    boton.value = false;
+                    boton.innerText = '▶'; 
+                }
+
+            });
+            dot4 = (v3, m4) => {return (v3[0]*m4[0] + v3[1]*m4[1] + v3[2]*m4[2] + m4[3])};
+
+            draw = (v) =>{
+                let P = v.length;
+                console.log(P);
+                for(let i=0; i<P; i++){
+                    ctx.beginPath();
+                    let N = v[i].length;
+                    ctx.moveTo(v[i][0], v[i][1]);
+                    for(let j=3; j<N; j+=3){
+                        ctx.lineTo(v[i][j], v[i][j+1]);
+                    }
+                    ctx.stroke();
+                }
+            }
+
+            transform = (v, m) => {
+                let P = v.length;
+                for(let i=0; i<P; i++){
+                    let N = v[i].length;
+                    for(let j=0; j<N; j+=3){
+                        let xp = [0,0,0];
+                        for(let k=0; k<3; k++){
+                            xp[k] = dot4(v[i].slice(j,j+3),m.slice(k*4,k*4+4));
+                        }
+                        for(let k=0; k<3; k++) v[i][j+k] = xp[k]
+                    }
+
+                }
+                return v;
+            }
+            function pintar(){
+                let flag = document.getElementById('boton').value;
+                flag = flag.toLowerCase() == 'true' ? true : false;
+                console.log(flag);
+                
+
+                if(flag){
+                    
+                    /*ctx.beginPath();
+                    ctx.moveTo(vertex[0], vertex[1]);
+                    ctx.lineTo(vertex[3], vertex[4]);
+                    ctx.lineTo(vertex[6], vertex[7]);
+                    ctx.lineTo(vertex[9], vertex[10]);
+                    ctx.lineTo(vertex[3], vertex[4]);
+                    ctx.stroke();*/
+                    //console.log(vertex);
+                    //var vtx = transform(vertex, mv);
+                    //console.log(vtx);
+                    ctx.clearRect(0, 0, ctx.width, ctx.height)
+                    draw(vertex);
+                    //ctx.fill()
+                }
+                requestAnimationFrame(pintar);
+                
+            }
+            pintar();
+
+        </script>
+    </body>
+</html>
