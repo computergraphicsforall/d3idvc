@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Computación gráfica -->
+        <!-- Jorge Victorino, Miguel Barrero-->
+        <title>Documento guia para Three.js</title>
+        <!--Configuracion meta-->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+        <!-- Recursos basicos de three.js -->
+        <!-- La ruta de estos recursos son relativos dependiendo en donde usted los tenga -->
+        <script type="text/javascript" src="../../grafica/three.js/build/three.js"></script>
+        <script type="text/javascript" src="../../grafica/three.js/examples/js/controls/OrbitControls.js"></script>
+    </head>
+    <body>
+        <script type="text/javascript">
+            //http://math.hws.edu/graphicsbook/index.html Libro de computación grafica, en linea y gratis
+
+            var renderer, scene, camera, light2, light1, controls;
+
+            initScene();
+            animate();
+            gui();
+            function addNoise(geo){
+                //console.log(geo.attributes.position.lenght)
+                for (let j=0; j<geo.attributes.position.array.length; j+=3){
+                    geo.attributes.position.array[j+2] += Math.random()*0.1
+                }
+            }
+
+            function initScene() {
+                scene = new THREE.Scene();
+                scene.background = new THREE.Color('slategray');
+
+                renderer = new THREE.WebGLRenderer( {antialias:true} );
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                document.body.appendChild(renderer.domElement)
+
+                camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
+                camera.position.set(10, 0, 10);
+                camera.lookAt(0,0,0);
+                camera.up.set(0, 0, 1);
+
+                light1 = new THREE.PointLight('gold');
+                light1.position.set(-20, 0, 20);
+                light2 = new THREE.PointLight('azure');
+                light2.position.set(20, 0, -20);
+
+                controls = new THREE.OrbitControls(camera, renderer.domElement)
+                controls.addEventListener('change', render)
+
+                geo = new THREE.TorusBufferGeometry(2, 1, 30, 20);
+                addNoise(geo)
+                mat = new THREE.MeshPhongMaterial( {color: 'firebrick', shininess: 1024, wireframe:false} );
+                sph = new THREE.Mesh(geo, mat);
+
+
+                const axis = new THREE.AxesHelper(2);
+
+                scene.add(axis);
+                scene.add(sph);
+                scene.add(light1)
+                scene.add(light2)
+
+                window.addEventListener('resize', onWindowResize, false);
+            }
+
+            function render() {
+                renderer.render(scene, camera)
+            }
+
+            function animate() {
+
+                requestAnimationFrame(animate);
+                render();
+            }
+
+            function gui() {
+
+            }
+
+            function onWindowResize () {
+
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setClearColor('slategray');
+                controls.update();
+                render();
+            }
+        </script>
+    </body>
+</html>
+
+
+
+
+
+

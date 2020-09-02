@@ -14,12 +14,10 @@
     </head>
     <body>
         <script type="text/javascript">
-            //http://math.hws.edu/graphicsbook/index.html Libro de computación grafica, en linea y gratis
 
-            var sc = 0.0001;
-            var renderer, scene, camera, light1, controls, polygonUPZ;
+            let   renderer, scene, camera, light1, light2, controls, polygonUPZ;
             const PATH_UPZ_FILE = '../data/dataupz.json';
-            var extrSet = {depth: 0.021, bevelEnabled: true, bevelSegments: 2, steps: 2, bevelSize: 0, bevelThickness: 0};
+            const worldx = -74.08174939702558, worldy = 4.60971021280353;
 
             let dataUPZ = dataLoad(PATH_UPZ_FILE);
             dataUPZ.then(data => polygonUPZ = data)
@@ -29,87 +27,86 @@
 
             function drawMap() {
 
-                var map = new THREE.Group();
+                let map = new THREE.Group();
 
                 for (var i = 0; i < polygonUPZ.features.length; i++) {
 
                     let polygonGeometry = new THREE.Geometry();
                     let nPolygons = polygonUPZ.features[i].geometry.coordinates.length;
                     let levels = true;
+                    const sc = 0.0005;
+                    //const deep = 0.0005 * Math.round((Math.random()*10));
+                    const deep = 0.002;
+
+                    let extrSet = {depth: deep, bevelEnabled: true, bevelSegments: 2, steps: 2, bevelSize: sc, bevelThickness: sc};
 
                     if (polygonUPZ.features[i].geometry.coordinates[0][0][0].length == undefined)
                         levels = false;
 
                     if (levels) {
-                        var multipolygon = new THREE.Group();
-                        for (var j = 0; j < nPolygons; j++){
+                        let multipolygon = new THREE.Group();
+                        for(let j = 0; j < nPolygons; j++){
                             let nPoints = polygonUPZ.features[i].geometry.coordinates[j][0].length;
-                            //let lineGeometry = new THREE.Geometry();
-                            let pts = [];
+                            let pts = [], cx = 0, cy = 0;
 
                             for (var k = 0; k < nPoints; k++) {
 
-                                let long = polygonUPZ.features[i].geometry.coordinates[j][0][k][0];
+                                let lon = polygonUPZ.features[i].geometry.coordinates[j][0][k][0];
                                 let lat = polygonUPZ.features[i].geometry.coordinates[j][0][k][1];
-                                //lineGeometry.vertices.push(new THREE.Vector3(long, lat, 0));
-                                pts.push(new THREE.Vector2(long, lat));
+                                cx += lon;
+                                cy += lat;
+                                pts.push(new THREE.Vector2(lon, lat));
 
                             }
+                            cx /= nPoints;
+                            cy /= nPoints;
+                            cx = (cx - worldx)/12
+                            cy = (cy - worldy)/10
                             let shape = new THREE.Shape(pts);
+                            let geo = new THREE.ExtrudeBufferGeometry(shape, extrSet);
+                            geo.translate(cx, cy, 0);
+                            let mat = new THREE.MeshPhongMaterial({color: 'white', shininess: 124});
+                            let shapeMesh = new THREE.Mesh(geo, mat);
 
-                            var geo = new THREE.ExtrudeBufferGeometry(shape, extrSet);
-                            var mat = new THREE.MeshPhongMaterial({color: 'white', shininess: 1024});
-                            //var lineMesh = new THREE.Line(geo, mat);
-                            var lineMesh = new THREE.Mesh(geo, mat);
-
-                            //let lineMaterial = new THREE.LineBasicMaterial({ color: 0xFFFFFF, linewidth: 2});
-                            //var lineMesh = new THREE.Line(lineGeometry, lineMaterial);
-                            multipolygon.add(lineMesh);
+                            multipolygon.add(shapeMesh);
                         }
                         map.add(multipolygon);
-
-
-
-                    } else {
-
-                        let nPoints = polygonUPZ.features[i].geometry.coordinates[0].length;
-                        //let lineGeometry = new THREE.Geometry();
-                        let pts = []
-
-                        for (var k = 0; k < nPoints; k++) {
-
-                            let long = polygonUPZ.features[i].geometry.coordinates[0][k][0];
-                            let lat = polygonUPZ.features[i].geometry.coordinates[0][k][1];
-                            //lineGeometry.vertices.push(new THREE.Vector3(long, lat, 0));
-                            pts.push(new THREE.Vector2(long, lat));
-                        }
-
-                        let shape = new THREE.Shape(pts);
-
-                        //var geo = new THREE.ShapeBufferGeometry(shape)
-                        var mat = new THREE.MeshPhongMaterial({color: 'white', side: THREE.DoubleSide, shininess: 1024});
-                        var geo = new THREE.ExtrudeBufferGeometry(shape, extrSet);
-                        //var lineMesh = new THREE.Line(geo, mat);
-                        var lineMesh = new THREE.Mesh(geo, mat);
-                        //let lineMaterial = new THREE.LineBasicMaterial({ color: 0xFFFFFF, linewidth: 2})
-                        //let lineMesh = new THREE.Line(lineGeometry, lineMaterial);
-                        map.add(lineMesh);
                     }
+                    else {
+                        let nPoints = polygonUPZ.features[i].geometry.coordinates[0].length;
+                        let pts = [], cx = 0, cy = 0;
 
+                        for (let k = 0; k < nPoints; k++) {
 
+                            let lon = polygonUPZ.features[i].geometry.coordinates[0][k][0];
+                            let lat = polygonUPZ.features[i].geometry.coordinates[0][k][1];
+                            cx += lon;
+                            cy += lat;
+                            pts.push(new THREE.Vector2(lon, lat));
+                        }
+                        cx /= nPoints;
+                        cy /= nPoints;
+                        cx = (cx - worldx)/12
+                        cy = (cy - worldy)/10
+                        let shape = new THREE.Shape(pts);
+                        var mat = new THREE.MeshPhongMaterial({color: 'white', shininess: 124});
+                        var geo = new THREE.ExtrudeBufferGeometry(shape, extrSet);
+                        geo.translate(cx, cy, 0);
+                        var shapeMesh = new THREE.Mesh(geo, mat);
+
+                        map.add(shapeMesh);
+                    }
                 }
-
                 scene.add(map);
             }
-
 
             function dataLoad (path) {
 
                 if (path.endsWith('.csv') || path.endsWith('.CSV')) {
 
                     return d3.csv(path);
-
-                } else if (path.endsWith('.json') || path.endsWith('.JSON')) {
+                }
+                else if (path.endsWith('.json') || path.endsWith('.JSON')) {
 
                     return d3.json(path);
                 }
@@ -117,31 +114,35 @@
 
             function initScene() {
                 scene = new THREE.Scene();
-                scene.background = new THREE.Color('gray');
+                scene.background = new THREE.Color('slategray');
 
                 renderer = new THREE.WebGLRenderer( {antialias:true} );
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 document.body.appendChild(renderer.domElement)
 
                 camera = new THREE.PerspectiveCamera(65, window.innerWidth/window.innerHeight, 0.01, 100);
-                camera.position.set(-74.17, 4.60971021280353, 0.3972143184578457);
+                camera.position.set(worldx-0.1, worldy, 0.32);
 
                 camera.up.set(0, 0, 1);
 
-                light1 = new THREE.PointLight('gold');
-                light1.position.set(-20, 0, 20);
+                light1 = new THREE.PointLight('cadetblue');
+                light1.position.set(-70, 4, 10);
+
+                light2 = new THREE.PointLight('plum');
+                light2.position.set(-75, 8, -10);
 
                 controls = new THREE.OrbitControls(camera, renderer.domElement)
-                controls.target.set(-74.08174939702558, 4.60971021280353, 0);
+                controls.target.set(worldx, worldy, 0);
                 controls.addEventListener('change', render)
                 drawMap();
 
-                const axis = new THREE.AxesHelper(10);
-                axis.position.x = -74.081749;
-                axis.position.y = 4.6097102;
+                const axis = new THREE.AxesHelper(1);
+                axis.position.x = worldx;
+                axis.position.y = worldy;
 
                 scene.add(axis);
                 scene.add(light1)
+                scene.add(light2)
                 controls.update();
                 window.addEventListener('resize', onWindowResize, false);
             }
@@ -166,7 +167,7 @@
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
-                renderer.setClearColor('gray');
+                renderer.setClearColor('slategray');
                 render();
             }
         </script>
