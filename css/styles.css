@@ -5,3 +5,8 @@
     transform-origin: center center;
     transform: rotate(-80deg);
 }
+
+.upz {
+    opacity: 1;
+    stroke: transparent
+}

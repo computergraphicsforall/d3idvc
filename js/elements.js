@@ -84,14 +84,13 @@ function addChoroplethLayerOnMap (svgElement, geoData, choroData, color, kColors
             colorPalette = d3.schemeGreens[kColors];
         break;
     }
-
-    let dataDomain = d3.extent(geoData, d => extractDomainValues(d, property))
+    
+    let dataDomain = d3.extent(choroData, d => extractDomainValues(d, property))
     let colorScale = d3.scaleQuantize().domain(dataDomain).range(colorPalette);
     
     let projection = d3.geoMercator().center(centralPoint).scale(scale);
 
     let path = d3.geoPath().projection(projection);
-    console.log(geoData);
     let svg = d3.select(svgElement);
     svg.append('g')
         .attr('class', svgClass)
@@ -99,11 +98,84 @@ function addChoroplethLayerOnMap (svgElement, geoData, choroData, color, kColors
         .data(geoData.features).enter()
         .append('path')
         .attr('d', path)
+        .attr('class', pathClass)
+        .attr('fill', d => colorScale(getColorByChoroplethData(d, choroData, idMasterKey, property)))
+        .on('mouseover', addEventMouseOver)
+        .on('mouseleave', addEventMouseLeave);
 
+    choroplethLegend(colorScale);
 
 }
 
 function extractDomainValues (element, property) {
 
     return element.properties[property];
+}
+
+function getColorByChoroplethData(element, choroData, idKeyMaster, property) {
+
+    let color;
+
+    for (var i = 0; i < choroData.length; i++) {
+
+        if (element.properties[idKeyMaster] === choroData[i][idKeyMaster]) {
+            
+            color = choroData[i].properties[property];
+            
+            break;
+        }
+    }
+    //console.log(color);
+    return color;
+}
+
+function choroplethLegend(colorScale) {
+
+    let svg = d3.select('svg');
+    let labels = colorScale.ticks();
+
+    console.log(labels);
+
+    svg.append('g')
+        .attr('class', 'legend')
+        .attr('transform', 'translate(20, 90)')
+    
+    let legend = d3.legendColor();
+    legend.labels ( d => {return labels[d.i]})
+        .shapePadding(4)
+        .title('Incidentes')
+        .scale(colorScale).cells();
+
+    svg.select('.legend').call(legend);
+}
+
+function addEventMouseOver (d) {
+
+    let pol = d3.select(this).attr('class');
+    d3.selectAll('.' + pol)
+        .transition()
+        .duration(200)
+        .style('opacity', .7)
+        .style('stroke', 'transparent')
+    
+    d3.select(this)
+        .transition()
+        .duration(200)
+        .style('opacity', 1)
+        .style('stroke', 'black')
+}
+
+function addEventMouseLeave(d) {
+
+    let pol = d3.select(this).attr('class');
+    d3.selectAll('.' + pol)
+        .transition()
+        .duration(200)
+        .style('opacity', 1)
+        .style('stroke', 'transparent')
+    
+    d3.select(this)
+        .transition()
+        .duration(200)
+        .style('stroke', 'transparent')
 }
