@@ -16,6 +16,9 @@
         <script type="text/javascript">
 
             let   renderer, scene, camera, light1, light2, controls, polygonUPZ, dataNuse, dataFilter;
+            var wPlane = 0.23; var hPlane = 0.46;
+            var segLon = 10; var segLat = 20;
+
             const PATH_UPZ_FILE = '../data/dataupz.json';
             const PATH_NUSE_FILE = '../dataNuse/short.csv';
             const timeConv = d3.timeParse("%Y-%m-%d");
@@ -23,12 +26,12 @@
             let dataUPZ = dataLoad(PATH_UPZ_FILE);
             dataUPZ.then(data => polygonUPZ = data)
                 .then(c=> dataLoad(PATH_NUSE_FILE))
-                .then(c => dataNuse = c)
-
-                
+                .then(c => dataNuse = c)              
                 .then(c => initScene())
                 .then(c => filter('2014-02-01', dataNuse))
-                .then(c => drawPoints(c))
+                .then(c => dataFilter = c)
+                //.then(c => drawPoints(c))
+                .then(c => KDE(wPlane, hPlane, segLon, segLat))
                 .then(c => animate())
                 .then(c => gui());
 
@@ -121,6 +124,131 @@
                 scene.add(pGroup);
 
             }
+            var xMin = -74.22; var xMax = -74.01; var yMin = 4.43; var yMax = 4.82;  var bw = (1/50) * 2;
+            
+
+            
+            function KDE(wPlane, hPlane, segLon, segLat) {
+
+                // origen de coordenas y punto de ubicación del plano
+                let cx = -74.11999;
+                let cy = 4.6097102; 
+                
+                // ordenar los datos 1. tiempo, longitud, latitud
+                // determinar en los datos inicio y fin
+                //calcular la suma
+                // sacar los vertices del plano
+
+                //planeKDE = new THREE.PlaneBufferGeometry(xMax -xMin, yMax, segLon, segLat);
+                var planeKDE = new THREE.PlaneBufferGeometry(wPlane, hPlane, segLon, segLat);
+                let mtKDE = new THREE.MeshPhongMaterial({color:'black', specular:'yellow', side:THREE.DoubleSide, shininess:124, wireframe: true});
+                let kde = new THREE.Mesh(planeKDE, mtKDE);
+                kde.position.set(cx, cy, 0.01);
+          
+                // vertex of plane and bandwith kde
+                let nPlaneVertex = planeKDE.attributes.position.count;
+                let bwKde = (cx + planeKDE.attributes.position.getX(1)) - (cx + planeKDE.attributes.position.getX(0));
+
+                // draw circles to KDE on plane
+                for (let i = 0; i < nPlaneVertex; i++) {
+
+                    let vx = cx + planeKDE.attributes.position.getX(i);
+                    let vy = cy + planeKDE.attributes.position.getY(i);
+                    
+                    //console.log('long:',vx, 'lat:', vy);
+                    let p = new THREE.CircleBufferGeometry((bwKde / 4) * 3.0, 20);
+                    let pt = new THREE.MeshBasicMaterial({ color: 'blue', wireframe: true});
+                    let pM = new THREE.Mesh(p, pt);
+                    pM.position.set(vx, vy, 0.01);
+                    //scene.add(pM);
+
+                }
+                
+                for (let i = 0; i < dataFilter.length; i++) {
+                    
+                    // lon, lat incident
+                    let lon = +dataFilter[i].LONGITUD;
+                    let lat = +dataFilter[i].LATITUD;
+
+                    let point = new THREE.CircleBufferGeometry(0.001, 20);
+                    let pointMt = new THREE.MeshBasicMaterial({ color: 'red', wireframe: false});
+                    let pMesh = new THREE.Mesh(point, pointMt);
+                    pMesh.position.set(lon, lat, 0.01);
+
+                    scene.add(pMesh);
+                    // near vertex index an incident
+                    /*  *-----*
+                     *  -   * -
+                     *  -     - 
+                     *  *-----*
+                     * */
+                    let ix = getVertexIndexOnPlane('x', cx, lon, segLon, wPlane);
+                    let iy = getVertexIndexOnPlane('y', cy, lat, segLat, hPlane);
+
+                    // original vertex position 
+                    // this movement is made from left to right(x axis) and from top to bottom (y axis)
+                    /*     |   ------- -> (1)
+                     *     v   -------
+                     *    (2)  ------- 
+                     *         -------
+                     * */
+                    let vo = ix + (iy * (segLon + 1)); 
+                    //console.log(vo);
+                    // next three vertices to form a square 
+                    let v1x = vo * 3;
+                    let v2x = v1x + 3;
+                    let v3x = (vo + (segLon + 1)) * 3;
+                    let v4x = v3x + 3;
+
+                    // xi and yi incident to KDE Function
+                    let xi = lon - cx;
+                    let yi = lat - cy;
+                    //console.log(v1x);
+                    
+                    // x0 and y0 values ​​for each vertex of the square y that are input for the kde at that vertex
+                    let x1 = planeKDE.attributes.position.array[v1x];
+                    let y1 = planeKDE.attributes.position.array[v1x + 1];
+                    //console.log(i, x1, y1);
+                    let x2 = planeKDE.attributes.position.array[v2x];
+                    let y2 = planeKDE.attributes.position.array[v2x + 1];
+
+                    let x3 = planeKDE.attributes.position.array[v3x];
+                    let y3 = planeKDE.attributes.position.array[v3x + 1];
+
+                    let x4 = planeKDE.attributes.position.array[v4x];
+                    let y4 = planeKDE.attributes.position.array[v4x + 1];
+
+                    // accumulating the value in z for each vertex according to KDE
+                    planeKDE.attributes.position.array[v1x + 2] = (planeKDE.attributes.position.array[v1x + 2] + gaussian(xi, yi, x1, y1, bwKde)) * 0.05;
+                    planeKDE.attributes.position.array[v2x + 2] = (planeKDE.attributes.position.array[v2x + 2] + gaussian(xi, yi, x2, y2, bwKde)) * 0.05;
+                    planeKDE.attributes.position.array[v3x + 2] = (planeKDE.attributes.position.array[v3x + 2] + gaussian(xi, yi, x3, y3, bwKde)) * 0.05;
+                    planeKDE.attributes.position.array[v4x + 2] = (planeKDE.attributes.position.array[v4x + 2] + gaussian(xi, yi, x4, y4, bwKde)) * 0.05;
+                }
+
+                scene.add(kde);
+                
+            }
+
+            // c = punto de ubicación en x o y del plano, p = punto en lat o long de incidente, s, total segmentos en x o y del plano, woh = ancho o alto del plano; 
+            function getVertexIndexOnPlane(axis, c, p, s, woh) {
+
+                let index;
+                if (axis == 'x') {
+                    index = Math.floor((((p - c) + (woh / 2)) * s) / woh);
+                }
+
+                if (axis == 'y') {
+                    index = Math.floor((((c - p) + (woh / 2)) * s) / woh);
+                }
+                
+                return index;
+            }
+
+            // xi = punto xi, xo = punto medio KDE, h = ancho de banda
+            function gaussian(xi, yi, xo, yo, h) {
+
+                return Math.exp(-((((xi - xo) ** 2) / (2 * (h ** 2))) + (((yi - yo) ** 2) / (2 * (h ** 2)))));
+            }
 
             function filter (dateToFilter, data) {
                 
@@ -131,7 +259,7 @@
                 let month = date.getMonth();
                 let year = date.getFullYear();
 
-                filterArray = data.filter( function (e){
+                filterArray = data.filter( e => {
 
                     let dateFilter = timeParse(e.FECHA);
                     //console.log(e.FECHA)
@@ -150,7 +278,7 @@
 
                 renderer = new THREE.WebGLRenderer( {antialias:true} );
                 renderer.setSize(window.innerWidth, window.innerHeight);
-                document.body.appendChild(renderer.domElement)
+                
 
                 camera = new THREE.PerspectiveCamera(65, window.innerWidth/window.innerHeight, 0.01, 100);
                 camera.position.set(-74.17, 4.60971021280353, 0.3972143184578457);
@@ -169,13 +297,14 @@
                 drawMap();
 
                 const axis = new THREE.AxesHelper(10);
-                axis.position.x = -74.081749;
+                axis.position.x = -74.11999;
                 axis.position.y = 4.6097102;
 
                 scene.add(axis);
                 scene.add(light1)
                 scene.add(light2)
                 controls.update();
+                document.body.appendChild(renderer.domElement)
                 window.addEventListener('resize', onWindowResize, false);
             }
 
