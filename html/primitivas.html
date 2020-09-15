@@ -23,9 +23,9 @@
             animate();
             gui();
             function addNoise(geo){
-                //console.log(geo.attributes.position.lenght)
+                console.log(geo)
                 for (let j=0; j<geo.attributes.position.array.length; j+=3){
-                    geo.attributes.position.array[j+2] += Math.random()*0.1
+                    geo.attributes.position.array[j+2] += Math.random()*0.2;
                 }
             }
 
