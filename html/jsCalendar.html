@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crime calendar</title>
+    <link rel="stylesheet" href="/css/calendar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="calendar">
+            <div class="month" id="0">
+                <div class="date">
+                    <h1>January</h1>    
+                </div>
+                <div class="weekdays">
+                    <div class="week">W</div>    
+                    <div>Mo</div>
+                    <div>Tu</div>
+                    <div>We</div>
+                    <div>Th</div>
+                    <div>Fr</div>
+                    <div>Sa</div>
+                    <div>Su</div>
+                </div>
+                
+                <div class="days">
+                    <div class="week">1</div>
+                    <div>-</div>
+                    <div>-</div>
+                    <div>1</div>
+                    <div>2</div>
+                    <div>3</div>       
+                    <div>4</div>
+                    <div>5</div>
+                    <div class="week">2</div>
+                    <div>6</div>
+                    <div>7</div>
+                    <div>8</div>
+                    <div>9</div>
+                    <div>10</div>
+                    <div>11</div>
+                    <div>12</div>
+                    <div class="week">3</div>
+                    <div>13</div>           
+                    <div>14</div>
+                    <div>15</div>
+                    <div>16</div>     
+                    <div>17</div>
+                    <div>18</div>
+                    <div>19</div>
+                    <div class="week">4</div>
+                    <div>20</div>
+                    <div>21</div>
+                    <div>22</div>
+                    <div>23</div>
+                    <div>24</div>
+                    <div class="today">25</div>
+                    <div>26</div>
+                    <div class="week">5</div>
+                    <div>27</div>  
+                    <div>28</div>
+                    <div>29</div>
+                    <div>30</div>
+                    <div>31</div>
+                    <div>-</div>
+                    <div>-</div>
+                </div>
+            </div>
+            <div class="month" id="1">
+                <div class="date">
+                    <h1>January</h1>    
+                </div>
+                <div class="weekdays">
+                    <div class="week">W</div>    
+                    <div>Mo</div>
+                    <div>Tu</div>
+                    <div>We</div>
+                    <div>Th</div>
+                    <div>Fr</div>
+                    <div>Sa</div>
+                    <div>Su</div>
+                </div>
+                
+                <div class="days">
+                    <div class="week">1</div>
+                    <div>-</div>
+                    <div>-</div>
+                    <div>1</div>
+                    <div>2</div>
+                    <div>3</div>       
+                    <div>4</div>
+                    <div>5</div>
+                    <div class="week">2</div>
+                    <div>6</div>
+                    <div>7</div>
+                    <div>8</div>
+                    <div>9</div>
+                    <div>10</div>
+                    <div>11</div>
+                    <div>12</div>
+                    <div class="week">3</div>
+                    <div>13</div>           
+                    <div>14</div>
+                    <div>15</div>
+                    <div>16</div>     
+                    <div>17</div>
+                    <div>18</div>
+                    <div>19</div>
+                    <div class="week">4</div>
+                    <div>20</div>
+                    <div>21</div>
+                    <div>22</div>
+                    <div>23</div>
+                    <div>24</div>
+                    <div class="today">25</div>
+                    <div>26</div>
+                    <div class="week">5</div>
+                    <div>27</div>  
+                    <div>28</div>
+                    <div>29</div>
+                    <div>30</div>
+                    <div>31</div>
+                    <div>-</div>
+                    <div>-</div>
+                </div>
+            </div>
+            <div class="month" id="2">
+                <div class="date">
+                    <h1>January</h1>    
+                </div>
+                <div class="weekdays">
+                    <div class="week">W</div>    
+                    <div>Mo</div>
+                    <div>Tu</div>
+                    <div>We</div>
+                    <div>Th</div>
+                    <div>Fr</div>
+                    <div>Sa</div>
+                    <div>Su</div>
+                </div>
+                
+                <div class="days">
+                    <div class="week">1</div>
+                    <div>-</div>
+                    <div>-</div>
+                    <div>1</div>
+                    <div>2</div>
+                    <div>3</div>       
+                    <div>4</div>
+                    <div>5</div>
+                    <div class="week">2</div>
+                    <div>6</div>
+                    <div>7</div>
+                    <div>8</div>
+                    <div>9</div>
+                    <div>10</div>
+                    <div>11</div>
+                    <div>12</div>
+                    <div class="week">3</div>
+                    <div>13</div>           
+                    <div>14</div>
+                    <div>15</div>
+                    <div>16</div>     
+                    <div>17</div>
+                    <div>18</div>
+                    <div>19</div>
+                    <div class="week">4</div>
+                    <div>20</div>
+                    <div>21</div>
+                    <div>22</div>
+                    <div>23</div>
+                    <div>24</div>
+                    <div class="today">25</div>
+                    <div>26</div>
+                    <div class="week">5</div>
+                    <div>27</div>  
+                    <div>28</div>
+                    <div>29</div>
+                    <div>30</div>
+                    <div>31</div>
+                    <div>-</div>
+                    <div>-</div>
+                </div>
+            </div>
+            <div class="month" id="3">
+                <div class="date">
+                    <h1>January</h1>    
+                </div>
+                <div class="weekdays">
+                    <div class="week">W</div>    
+                    <div>Mo</div>
+                    <div>Tu</div>
+                    <div>We</div>
+                    <div>Th</div>
+                    <div>Fr</div>
+                    <div>Sa</div>
+                    <div>Su</div>
+                </div>
+                
+                <div class="days">
+                    <div class="week">1</div>
+                    <div>-</div>
+                    <div>-</div>
+                    <div>1</div>
+                    <div>2</div>
+                    <div>3</div>       
+                    <div>4</div>
+                    <div>5</div>
+                    <div class="week">2</div>
+                    <div>6</div>
+                    <div>7</div>
+                    <div>8</div>
+                    <div>9</div>
+                    <div>10</div>
+                    <div>11</div>
+                    <div>12</div>
+                    <div class="week">3</div>
+                    <div>13</div>           
+                    <div>14</div>
+                    <div>15</div>
+                    <div>16</div>     
+                    <div>17</div>
+                    <div>18</div>
+                    <div>19</div>
+                    <div class="week">4</div>
+                    <div>20</div>
+                    <div>21</div>
+                    <div>22</div>
+                    <div>23</div>
+                    <div>24</div>
+                    <div class="today">25</div>
+                    <div>26</div>
+                    <div class="week">5</div>
+                    <div>27</div>  
+                    <div>28</div>
+                    <div>29</div>
+                    <div>30</div>
+                    <div>31</div>
+                    <div>-</div>
+                    <div>-</div>
+                </div>
+            </div>
+            <div class="month" id="4">
+                <div class="date">
+                    <h1>January</h1>    
+                </div>
+                <div class="weekdays">
+                    <div class="week">W</div>    
+                    <div>Mo</div>
+                    <div>Tu</div>
+                    <div>We</div>
+                    <div>Th</div>
+                    <div>Fr</div>
+                    <div>Sa</div>
+                    <div>Su</div>
+                </div>
+                
+                <div class="days">
+                    <div class="week">1</div>
+                    <div>-</div>
+                    <div>-</div>
+                    <div>1</div>
+                    <div>2</div>
+                    <div>3</div>       
+                    <div>4</div>
+                    <div>5</div>
+                    <div class="week">2</div>
+                    <div>6</div>
+                    <div>7</div>
+                    <div>8</div>
+                    <div>9</div>
+                    <div>10</div>
+                    <div>11</div>
+                    <div>12</div>
+                    <div class="week">3</div>
+                    <div>13</div>           
+                    <div>14</div>
+                    <div>15</div>
+                    <div>16</div>     
+                    <div>17</div>
+                    <div>18</div>
+                    <div>19</div>
+                    <div class="week">4</div>
+                    <div>20</div>
+                    <div>21</div>
+                    <div>22</div>
+                    <div>23</div>
+                    <div>24</div>
+                    <div class="today">25</div>
+                    <div>26</div>
+                    <div class="week">5</div>
+                    <div>27</div>  
+                    <div>28</div>
+                    <div>29</div>
+                    <div>30</div>
+                    <div>31</div>
+                    <div>-</div>
+                    <div>-</div>
+                </div>
+            </div>
+            <div class="month" id="5">
+                <div class="date">
+                    <h1>January</h1>    
+                </div>
+                <div class="weekdays">
+                    <div class="week">W</div>    
+                    <div>Mo</div>
+                    <div>Tu</div>
+                    <div>We</div>
+                    <div>Th</div>
+                    <div>Fr</div>
+                    <div>Sa</div>
+                    <div>Su</div>
+                </div>
+                
+                <div class="days">
+                    <div class="week">1</div>
+                    <div>-</div>
+                    <div>-</div>
+                    <div>1</div>
+                    <div>2</div>
+                    <div>3</div>       
+                    <div>4</div>
+                    <div>5</div>
+                    <div class="week">2</div>
+                    <div>6</div>
+                    <div>7</div>
+                    <div>8</div>
+                    <div>9</div>
+                    <div>10</div>
+                    <div>11</div>
+                    <div>12</div>
+                    <div class="week">3</div>
+                    <div>13</div>           
+                    <div>14</div>
+                    <div>15</div>
+                    <div>16</div>     
+                    <div>17</div>
+                    <div>18</div>
+                    <div>19</div>
+                    <div class="week">4</div>
+                    <div>20</div>
+                    <div>21</div>
+                    <div>22</div>
+                    <div>23</div>
+                    <div>24</div>
+                    <div class="today">25</div>
+                    <div>26</div>
+                    <div class="week">5</div>
+                    <div>27</div>  
+                    <div>28</div>
+                    <div>29</div>
+                    <div>30</div>
+                    <div>31</div>
+                    <div>-</div>
+                    <div>-</div>
+                </div>
+            </div>
+            <div class="month" id="6">
+                <div class="date">
+                    <h1>January</h1>    
+                </div>
+                <div class="weekdays">
+                    <div class="week">W</div>    
+                    <div>Mo</div>
+                    <div>Tu</div>
+                    <div>We</div>
+                    <div>Th</div>
+                    <div>Fr</div>
+                    <div>Sa</div>
+                    <div>Su</div>
+                </div>
+                
+                <div class="days">
+                    <div class="week">1</div>
+                    <div>-</div>
+                    <div>-</div>
+                    <div>1</div>
+                    <div>2</div>
+                    <div>3</div>       
+                    <div>4</div>
+                    <div>5</div>
+                    <div class="week">2</div>
+                    <div>6</div>
+                    <div>7</div>
+                    <div>8</div>
+                    <div>9</div>
+                    <div>10</div>
+                    <div>11</div>
+                    <div>12</div>
+                    <div class="week">3</div>
+                    <div>13</div>           
+                    <div>14</div>
+                    <div>15</div>
+                    <div>16</div>     
+                    <div>17</div>
+                    <div>18</div>
+                    <div>19</div>
+                    <div class="week">4</div>
+                    <div>20</div>
+                    <div>21</div>
+                    <div>22</div>
+                    <div>23</div>
+                    <div>24</div>
+                    <div class="today">25</div>
+                    <div>26</div>
+                    <div class="week">5</div>
+                    <div>27</div>  
+                    <div>28</div>
+                    <div>29</div>
+                    <div>30</div>
+                    <div>31</div>
+                    <div>-</div>
+                    <div>-</div>
+                </div>
+            </div>
+            <div class="month" id="7">
+                <div class="date">
+                    <h1>January</h1>    
+                </div>
+                <div class="weekdays">
+                    <div class="week">W</div>    
+                    <div>Mo</div>
+                    <div>Tu</div>
+                    <div>We</div>
+                    <div>Th</div>
+                    <div>Fr</div>
+                    <div>Sa</div>
+                    <div>Su</div>
+                </div>
+                
+                <div class="days">
+                    <div class="week">1</div>
+                    <div>-</div>
+                    <div>-</div>
+                    <div>1</div>
+                    <div>2</div>
+                    <div>3</div>       
+                    <div>4</div>
+                    <div>5</div>
+                    <div class="week">2</div>
+                    <div>6</div>
+                    <div>7</div>
+                    <div>8</div>
+                    <div>9</div>
+                    <div>10</div>
+                    <div>11</div>
+                    <div>12</div>
+                    <div class="week">3</div>
+                    <div>13</div>           
+                    <div>14</div>
+                    <div>15</div>
+                    <div>16</div>     
+                    <div>17</div>
+                    <div>18</div>
+                    <div>19</div>
+                    <div class="week">4</div>
+                    <div>20</div>
+                    <div>21</div>
+                    <div>22</div>
+                    <div>23</div>
+                    <div>24</div>
+                    <div class="today">25</div>
+                    <div>26</div>
+                    <div class="week">5</div>
+                    <div>27</div>  
+                    <div>28</div>
+                    <div>29</div>
+                    <div>30</div>
+                    <div>31</div>
+                    <div>-</div>
+                    <div>-</div>
+                </div>
+            </div>
+            <div class="month" id="8">
+                <div class="date">
+                    <h1>January</h1>    
+                </div>
+                <div class="weekdays">
+                    <div class="week">W</div>    
+                    <div>Mo</div>
+                    <div>Tu</div>
+                    <div>We</div>
+                    <div>Th</div>
+                    <div>Fr</div>
+                    <div>Sa</div>
+                    <div>Su</div>
+                </div>
+                
+                <div class="days">
+                    <div class="week">1</div>
+                    <div>-</div>
+                    <div>-</div>
+                    <div>1</div>
+                    <div>2</div>
+                    <div>3</div>       
+                    <div>4</div>
+                    <div>5</div>
+                    <div class="week">2</div>
+                    <div>6</div>
+                    <div>7</div>
+                    <div>8</div>
+                    <div>9</div>
+                    <div>10</div>
+                    <div>11</div>
+                    <div>12</div>
+                    <div class="week">3</div>
+                    <div>13</div>           
+                    <div>14</div>
+                    <div>15</div>
+                    <div>16</div>     
+                    <div>17</div>
+                    <div>18</div>
+                    <div>19</div>
+                    <div class="week">4</div>
+                    <div>20</div>
+                    <div>21</div>
+                    <div>22</div>
+                    <div>23</div>
+                    <div>24</div>
+                    <div class="today">25</div>
+                    <div>26</div>
+                    <div class="week">5</div>
+                    <div>27</div>  
+                    <div>28</div>
+                    <div>29</div>
+                    <div>30</div>
+                    <div>31</div>
+                    <div>-</div>
+                    <div>-</div>
+                </div>
+            </div>
+            <div class="month" id="9">
+                <div class="date">
+                    <h1>January</h1>    
+                </div>
+                <div class="weekdays">
+                    <div class="week">W</div>    
+                    <div>Mo</div>
+                    <div>Tu</div>
+                    <div>We</div>
+                    <div>Th</div>
+                    <div>Fr</div>
+                    <div>Sa</div>
+                    <div>Su</div>
+                </div>
+                
+                <div class="days">
+                    <div class="week">1</div>
+                    <div>-</div>
+                    <div>-</div>
+                    <div>1</div>
+                    <div>2</div>
+                    <div>3</div>       
+                    <div>4</div>
+                    <div>5</div>
+                    <div class="week">2</div>
+                    <div>6</div>
+                    <div>7</div>
+                    <div>8</div>
+                    <div>9</div>
+                    <div>10</div>
+                    <div>11</div>
+                    <div>12</div>
+                    <div class="week">3</div>
+                    <div>13</div>           
+                    <div>14</div>
+                    <div>15</div>
+                    <div>16</div>     
+                    <div>17</div>
+                    <div>18</div>
+                    <div>19</div>
+                    <div class="week">4</div>
+                    <div>20</div>
+                    <div>21</div>
+                    <div>22</div>
+                    <div>23</div>
+                    <div>24</div>
+                    <div class="today">25</div>
+                    <div>26</div>
+                    <div class="week">5</div>
+                    <div>27</div>  
+                    <div>28</div>
+                    <div>29</div>
+                    <div>30</div>
+                    <div>31</div>
+                    <div>-</div>
+                    <div>-</div>
+                </div>
+            </div>
+            <div class="month" id="10">
+                <div class="date">
+                    <h1>January</h1>    
+                </div>
+                <div class="weekdays">
+                    <div class="week">W</div>    
+                    <div>Mo</div>
+                    <div>Tu</div>
+                    <div>We</div>
+                    <div>Th</div>
+                    <div>Fr</div>
+                    <div>Sa</div>
+                    <div>Su</div>
+                </div>
+                
+                <div class="days">
+                    <div class="week">1</div>
+                    <div>-</div>
+                    <div>-</div>
+                    <div>1</div>
+                    <div>2</div>
+                    <div>3</div>       
+                    <div>4</div>
+                    <div>5</div>
+                    <div class="week">2</div>
+                    <div>6</div>
+                    <div>7</div>
+                    <div>8</div>
+                    <div>9</div>
+                    <div>10</div>
+                    <div>11</div>
+                    <div>12</div>
+                    <div class="week">3</div>
+                    <div>13</div>           
+                    <div>14</div>
+                    <div>15</div>
+                    <div>16</div>     
+                    <div>17</div>
+                    <div>18</div>
+                    <div>19</div>
+                    <div class="week">4</div>
+                    <div>20</div>
+                    <div>21</div>
+                    <div>22</div>
+                    <div>23</div>
+                    <div>24</div>
+                    <div class="today">25</div>
+                    <div>26</div>
+                    <div class="week">5</div>
+                    <div>27</div>  
+                    <div>28</div>
+                    <div>29</div>
+                    <div>30</div>
+                    <div>31</div>
+                    <div>-</div>
+                    <div>-</div>
+                </div>
+            </div>
+            <div class="month" id="11">
+                <div class="date">
+                    <h1>January</h1>    
+                </div>
+                <div class="weekdays">
+                    <div class="week">W</div>    
+                    <div>Mo</div>
+                    <div>Tu</div>
+                    <div>We</div>
+                    <div>Th</div>
+                    <div>Fr</div>
+                    <div>Sa</div>
+                    <div>Su</div>
+                </div>
+                
+                <div class="days">
+                    <div class="week">1</div>
+                    <div>-</div>
+                    <div>-</div>
+                    <div>1</div>
+                    <div>2</div>
+                    <div>3</div>       
+                    <div>4</div>
+                    <div>5</div>
+                    <div class="week">2</div>
+                    <div>6</div>
+                    <div>7</div>
+                    <div>8</div>
+                    <div>9</div>
+                    <div>10</div>
+                    <div>11</div>
+                    <div>12</div>
+                    <div class="week">3</div>
+                    <div>13</div>           
+                    <div>14</div>
+                    <div>15</div>
+                    <div>16</div>     
+                    <div>17</div>
+                    <div>18</div>
+                    <div>19</div>
+                    <div class="week">4</div>
+                    <div>20</div>
+                    <div>21</div>
+                    <div>22</div>
+                    <div>23</div>
+                    <div>24</div>
+                    <div class="today">25</div>
+                    <div>26</div>
+                    <div class="week">5</div>
+                    <div>27</div>  
+                    <div>28</div>
+                    <div>29</div>
+                    <div>30</div>
+                    <div>31</div>
+                    <div>-</div>
+                    <div>-</div>
+                </div>
+            </div>   
+        </div>
+    </div>
+    <script src="/js/jsCalendar.js"></script>
+    
+</body>
+</html>

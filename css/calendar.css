@@ -1,0 +1,126 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Quicksand', sans-serif;
+
+}
+html {
+    font-size: 40.5%;
+}
+
+.container {
+    width: 100%;
+    height: 100vh;
+    background-color: #12121f;
+    color: #eee;
+    display: flex;
+    
+    /*horizontal*/
+    justify-content: center;
+    /*vertical*/
+    align-items: center;
+}
+
+.calendar {
+    width: 840px;
+    height: 450px;
+    background-color: #222227;
+    box-shadow: 0 0.5rem 3rem rgba(0, 0, 0, .4);
+    display: flex;
+    flex-wrap: wrap;
+
+}
+.month {
+    width: calc(800px / 4);
+    height: 20px;
+    background-color: royalblue;
+    justify-content: center;
+    margin-top: 5px;
+    margin-right: 5px;
+    margin-left: 5px;
+    align-items: center;
+    text-shadow: 0, 0.3rem 0.5rem rgba(0, 0, 0, .4);
+
+}
+
+.date {
+    text-align: center;
+}
+
+.month i {
+    font-size: 2.5rem;
+    cursor: pointer;
+}
+
+.month h1 {
+    font-size: 2.0rem;
+    font-weight: bold;
+    letter-spacing: 0.2rem;
+    margin-bottom: 1rem;
+}
+
+.month p {
+    font-size: 1.6rem;
+}
+.weekdays {
+    width: 100%;
+    height: 5rem;
+    display: flex;
+    color: royalblue;
+    align-items: center;
+}
+
+.weekdays div {
+    font-size: 1.5rem;
+    font-weight: 400;
+    letter-spacing: 0.1rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-shadow: 0, 0.3rem 0.5rem rgba(0, 0, 0, .4);
+
+}
+
+.days {
+    width: 100%;
+    display:flex;
+    flex-wrap: wrap;
+    
+}
+
+.days div {
+    font-size: 1.6rem;
+    width: calc(100% / 8);
+    height: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-shadow: 0, 0.3rem 0.5rem rgba(0, 0, 0, .4);
+
+    /*after cod hover:not(.today)*/
+    transition: background-color 0.2s;
+}
+
+.prev-date, .next-date {
+
+    opacity: 0.5;
+
+}
+.today {
+    background-color: royalblue;
+
+}
+
+.days div:hover:not(.today) {
+    background-color: #262626;
+    border: .2rem solid;
+    border-color: white;
+    cursor:pointer;
+}
+
+.week {
+    color:seagreen;
+    font-weight: bold;
+}
